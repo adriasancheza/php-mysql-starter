@@ -111,6 +111,18 @@ final class Request
         return $this->cookies[$key] ?? $default;
     }
 
+    /**
+     * Uploaded file entry as provided by $_FILES, or null when absent.
+     *
+     * @return array<mixed>|null
+     */
+    public function file(string $key): ?array
+    {
+        $file = $this->files[$key] ?? null;
+
+        return is_array($file) ? $file : null;
+    }
+
     public function server(string $key, mixed $default = null): mixed
     {
         return $this->server[$key] ?? $default;
