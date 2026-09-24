@@ -51,7 +51,7 @@ final class NotesController
             'body' => trim((string) $request->input('body', '')),
         ];
 
-        $validator = new Validator($request->all(), [
+        $validator = new Validator($data, [
             'title' => ['required', 'max:191'],
             'body' => ['required', 'max:10000'],
         ]);
@@ -99,14 +99,18 @@ final class NotesController
         $title = trim((string) $request->input('title', ''));
         $body = trim((string) $request->input('body', ''));
 
-        $validator = new Validator($request->all(), [
+        $validator = new Validator(['title' => $title, 'body' => $body], [
             'title' => ['required', 'max:191'],
             'body' => ['required', 'max:10000'],
         ]);
 
         if ($validator->fails()) {
+            // Re-render with what the user typed (not the stored values) so
+            // a failed validation doesn't discard their edits.
+            $submitted = new Note($note->id, $note->userId, $title, $body, $note->createdAt, $note->updatedAt);
+
             return Response::html($this->view->render('notes.edit', [
-                'note' => $note,
+                'note' => $submitted,
                 'errors' => $validator->errors(),
             ]), 422);
         }

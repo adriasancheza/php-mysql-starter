@@ -39,6 +39,13 @@ final class Session
 
     public static function regenerate(): void
     {
+        // No-op outside of an active PHP session (e.g. in tests that only
+        // stub $_SESSION directly) — session_regenerate_id() would otherwise
+        // raise a warning.
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            return;
+        }
+
         session_regenerate_id(true);
     }
 

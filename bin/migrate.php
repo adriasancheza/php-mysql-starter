@@ -51,18 +51,17 @@ foreach ($files as $file) {
     echo "Applying {$name}...\n";
 
     try {
-        $pdo->beginTransaction();
+        // Note: DDL statements (CREATE TABLE, etc.) cause MySQL to issue an
+        // implicit commit, so migrations are not wrapped in a PDO
+        // transaction here — it would silently end before we reach our own
+        // commit() call. Each migration file should be self-contained.
         $pdo->exec($sql);
 
         $stmt = $pdo->prepare('INSERT INTO migrations (migration) VALUES (:migration)');
         $stmt->execute(['migration' => $name]);
 
-        $pdo->commit();
         $ranCount++;
     } catch (PDOException $e) {
-        if ($pdo->inTransaction()) {
-            $pdo->rollBack();
-        }
         fwrite(STDERR, "Migration failed ({$name}): {$e->getMessage()}\n");
         exit(1);
     }

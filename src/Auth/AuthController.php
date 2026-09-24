@@ -35,7 +35,7 @@ final class AuthController
             'password' => (string) $request->input('password', ''),
         ];
 
-        $validator = new Validator($request->all(), [
+        $validator = new Validator(array_merge($request->all(), $data), [
             'name' => ['required', 'min:2', 'max:100'],
             'email' => ['required', 'email', 'max:191'],
             'password' => ['required', 'min:8', 'confirmed'],
