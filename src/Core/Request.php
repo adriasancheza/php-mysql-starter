@@ -19,7 +19,7 @@ final class Request
      * @param array<string, mixed> $cookies
      * @param array<string, mixed> $files
      */
-    private function __construct(
+    public function __construct(
         private readonly string $method,
         private readonly string $path,
         private readonly array $query,
@@ -54,6 +54,27 @@ final class Request
             server: $_SERVER,
             cookies: $_COOKIE,
             files: $_FILES,
+        );
+    }
+
+    /**
+     * Convenience factory for tests and manual construction (the front
+     * controller uses fromGlobals() instead).
+     *
+     * @param array<string, mixed> $query
+     * @param array<string, mixed> $body
+     * @param array<string, mixed> $server
+     */
+    public static function create(string $method, string $path, array $query = [], array $body = [], array $server = []): self
+    {
+        return new self(
+            method: strtoupper($method),
+            path: $path,
+            query: $query,
+            body: $body,
+            server: $server,
+            cookies: [],
+            files: [],
         );
     }
 
