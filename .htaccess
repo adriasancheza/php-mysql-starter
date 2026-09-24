@@ -1,0 +1,13 @@
+# Shared-hosting safety net: if the hosting panel points the domain at the
+# repository root instead of public/, redirect everything into public/
+# instead of exposing source files. Prefer configuring the document root
+# to point at public/ directly when your host allows it.
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{REQUEST_URI} !^/public/
+    RewriteRule ^(.*)$ /public/$1 [L]
+</IfModule>
+
+<FilesMatch "^\.">
+    Require all denied
+</FilesMatch>

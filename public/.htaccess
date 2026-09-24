@@ -1,0 +1,19 @@
+# Deny access to everything except the front controller, unless the
+# request maps to an existing file or directory inside public/ (assets).
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # If the request is for a real file or directory, serve it directly.
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+
+    # Otherwise route everything through the front controller.
+    RewriteRule ^ index.php [L]
+</IfModule>
+
+# Never allow direct access to dotfiles (.env, .git, etc.) if they were
+# ever placed under public/ by mistake.
+<FilesMatch "^\.">
+    Require all denied
+</FilesMatch>

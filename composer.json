@@ -1,0 +1,41 @@
+{
+    "name": "adriasancheza/php-mysql-starter",
+    "description": "A minimal, dependency-light PHP 8.3 + MySQL starter for shared hosting (Apache, FTP deploy, no root access).",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Adrià Sánchez",
+            "homepage": "https://github.com/adriasancheza"
+        }
+    ],
+    "require": {
+        "php": ">=8.3",
+        "ext-pdo": "*",
+        "ext-pdo_mysql": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^11.0",
+        "phpstan/phpstan": "^1.11"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit",
+        "stan": "phpstan analyse",
+        "migrate": "php bin/migrate.php"
+    },
+    "config": {
+        "sort-packages": true,
+        "optimize-autoloader": true
+    },
+    "minimum-stability": "stable"
+}
